@@ -28,8 +28,11 @@ def get_features():
 @app.route('/api/feature/new', methods=['POST'])
 def new_feature():
     data = request.get_json()
-    db.session.add(Feature(data.get('title'), data.get('description'), data.get(
-        'client'), data.get('priority'), data.get('target_date'), data.get('product_area')))
+    client = data.get('client')
+    priority = data.get('priority')
+    util.updatePriority(client, priority)
+    db.session.add(Feature(data.get('title'), data.get('description'),
+                           client, priority, data.get('target_date'), data.get('product_area')))
     db.session.commit()
     return jsonify(data)
 
@@ -38,17 +41,18 @@ def new_feature():
 @app.route('/api/feature/update', methods=['PATCH'])
 def update_feature():
     data = request.get_json()
+    client = data.get('client')
+    priority = data.get('priority')
     feature = Feature.query.filter_by(id=data.get('id')).first()
-    print(data.get('title'))
     feature.title = data.get('title')
     feature.description = data.get('description')
-    feature.client = data.get('client')
-    feature.priority = data.get('priority')
     feature.target_date = data.get('target_date')
     feature.product_area = data.get('product_area')
+    util.updatePriority(client, priority)
+    feature.client = client
+    feature.priority = priority
 
     db.session.commit()
-    print(data)
     return jsonify(data)
 
 

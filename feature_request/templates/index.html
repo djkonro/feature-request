@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Feature request</title>
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='bootstrap/css/bootstrap.min.css') }}">
+
+  <!-- Custom styles for this template -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+
+  <style>
+    .datepicker {
+      z-index: 1600 !important; /* has to be larger than 1050 */
+    }
+ 
+</style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded">
+      <a class="navbar-brand" href="#">Feature request</a>
+    </nav>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Title</th>
+          <th scope="col">Description</th>
+          <th scope="col">Client</th>
+          <th scope="col">Priority</th>
+          <th scope="col">Target Date</th>
+          <th scope="col">Product Area</th>
+        </tr>
+      </thead>
+      <tbody data-bind="foreach: features_response">
+        <tr>
+          <td data-bind="text: title">My project</td>
+          <td data-bind="text: description">This is my very first project.</td>
+          <td data-bind="text: client">Client A</td>
+          <td data-bind="text: priority">1</td>
+          <td data-bind="text: target_date">12/12/2018</td>
+          <td data-bind="text: product_area">Billing</td>
+          <td>
+            <button type="button" class="btn btn-secondary btn-sm" data-bind="click: setUp.bind(this, id, title, description, client, priority, target_date, product_area)"
+              data-toggle="modal" data-target="#myModal">Edit</button>
+          </td>
+          <td>
+            <button type="button" class="btn btn-danger btn-sm" data-bind="click: deleteFeature.bind(this, id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Trigger the modal with a button -->
+    <button type="button" class="btn btn-info btn-md center-block" data-bind="click: reset" data-toggle="modal"
+      data-target="#myModal">Add Feature</button>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add Feature</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form role="form">
+              <div class="form-group">
+                <label for="title" class="control-label col-xs-2">Title</label>
+                <div class="col-xs-10">
+                  <input type="text" class="form-control" data-bind="value: title">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="description" class="control-label col-xs-2">Description</label>
+                <div class="col-xs-10">
+                  <textarea class="form-control" id="description" data-bind="value: description"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="client" class="control-label col-xs-2">Client</label>
+                <div class="col-xs-10">
+                  <select name='client' data-bind="value: client">
+                    <option>Client A</option>
+                    <option>Client B</option>
+                    <option>Client C</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="priority" class="control-label col-xs-2">Priority</label>
+                <div class="col-xs-10">
+                  <input type="text" class="form-control" data-bind="value: priority" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="date" class="control-label col-xs-2">Target Date</label>
+                <div class="col-xs-10">
+                  <div class='input-group date' id='datetimepickerend'>
+                    <input type='text' class="form-control" id='end' data-bind="value: target_date" />
+                    <span class="input-group-addon">
+                      <span class="fa fa-calendar"></span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="area" class="control-label col-xs-2">Product Area</label>
+                <div class="col-xs-10">
+                  <select name='product_area' data-bind="value: product_area">
+                    <option>Policies</option>
+                    <option>Billing</option>
+                    <option>Claims</option>
+                    <option>Reports</option>
+                  </select>
+                </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" data-bind="click: saveFeature" data-dismiss="modal">Save
+              changes</button>
+            <button type="cancel" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- /container -->
+
+  <script>
+    $('#myModal').on('shown.bs.modal', function (e) {
+      $('#myInput').trigger('focus')
+      $('.input-group.date').datepicker({
+        format: "yyyy-mm-dd",
+        todayBtn: "linked",
+        autoclose: true,
+        todayHighlight: true
+      });
+    });
+  </script>
+  <script src="{{url_for('static', filename='FeaturesViewModel.js')}}"></script>
+</body>
+
+</html>

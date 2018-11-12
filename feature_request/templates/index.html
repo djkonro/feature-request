@@ -53,7 +53,7 @@
           <td data-bind="text: product_area">Billing</td>
           <td>
             <button type="button" class="btn btn-secondary btn-sm" data-bind="click: setUp.bind(this, id, title, description, client, priority, target_date, product_area)"
-              data-toggle="modal" data-target="#myModal">Edit</button>
+              data-toggle="modal" data-target="#featureModal">Edit</button>
           </td>
           <td>
             <button type="button" class="btn btn-danger btn-sm" data-bind="click: deleteFeature.bind(this, id)">Delete</button>
@@ -64,10 +64,10 @@
 
     <!-- Trigger the modal with a button -->
     <button type="button" class="btn btn-info btn-md center-block" data-bind="click: reset" data-toggle="modal"
-      data-target="#myModal">Add Feature</button>
+      data-target="#featureModal">Add Feature</button>
 
     <!-- Modal -->
-    <div id="myModal" class="modal" tabindex="-1" role="dialog">
+    <div id="featureModal" class="modal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -77,23 +77,23 @@
             </button>
           </div>
           <div class="modal-body">
-            <form role="form">
+            <form role="form" name="featureForm">
               <div class="form-group">
                 <label for="title" class="control-label col-xs-2">Title</label>
                 <div class="col-xs-10">
-                  <input type="text" class="form-control" data-bind="value: title">
+                  <input type="text" class="form-control" data-bind="value: title" id="title" required/>
                 </div>
               </div>
               <div class="form-group">
                 <label for="description" class="control-label col-xs-2">Description</label>
                 <div class="col-xs-10">
-                  <textarea class="form-control" id="description" data-bind="value: description"></textarea>
+                  <textarea class="form-control" id="description" data-bind="value: description" required></textarea>
                 </div>
               </div>
               <div class="form-group">
                 <label for="client" class="control-label col-xs-2">Client</label>
                 <div class="col-xs-10">
-                  <select name='client' data-bind="value: client">
+                  <select name='client' data-bind="value: client" required>
                     <option>Client A</option>
                     <option>Client B</option>
                     <option>Client C</option>
@@ -103,14 +103,14 @@
               <div class="form-group">
                 <label for="priority" class="control-label col-xs-2">Priority</label>
                 <div class="col-xs-10">
-                  <input type="text" class="form-control" data-bind="value: priority" />
+                  <input type="number" class="form-control" data-bind="value: priority" required/>
                 </div>
               </div>
               <div class="form-group">
                 <label for="date" class="control-label col-xs-2">Target Date</label>
                 <div class="col-xs-10">
                   <div class='input-group date' id='datetimepickerend'>
-                    <input type='text' class="form-control" id='end' data-bind="value: target_date" />
+                    <input type='text' class="form-control" id='end' data-bind="value: target_date" readonly="true" required/>
                     <span class="input-group-addon">
                       <span class="fa fa-calendar"></span>
                     </span>
@@ -120,7 +120,7 @@
               <div class="form-group">
                 <label for="area" class="control-label col-xs-2">Product Area</label>
                 <div class="col-xs-10">
-                  <select name='product_area' data-bind="value: product_area">
+                  <select name='product_area' data-bind="value: product_area" required>
                     <option>Policies</option>
                     <option>Billing</option>
                     <option>Claims</option>
@@ -130,7 +130,7 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" data-bind="click: saveFeature" data-dismiss="modal">Save
+            <button type="submit" class="btn btn-primary" data-bind="click: saveFeature" >Save
               changes</button>
             <button type="cancel" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
@@ -141,7 +141,7 @@
   </div> <!-- /container -->
 
   <script>
-    $('#myModal').on('shown.bs.modal', function (e) {
+    $('#featureModal').on('shown.bs.modal', function (e) {
       $('#myInput').trigger('focus')
       $('.input-group.date').datepicker({
         format: "yyyy-mm-dd",

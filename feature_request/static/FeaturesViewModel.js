@@ -33,6 +33,14 @@ function FeaturesViewModel() {
     }
 
     self.saveFeature = function () {
+        if (!(self.title() && self.description() && self.client() && self.target_date() && self.product_area())) {
+            alert("All input fields are required")
+            return;
+        } else if (!(self.priority() && Number.parseInt(self.priority()))) {
+            alert("Priority requires integer input")
+            return;
+        }
+        validateForm()
         var feature = {
             'id': self.id(),
             'title': self.title(),
@@ -48,6 +56,7 @@ function FeaturesViewModel() {
         } else {
             editFeature(feature)
         }
+        $('#featureModal').modal('hide');
     }
 
     self.newFeature = function (feature) {
@@ -106,6 +115,10 @@ function FeaturesViewModel() {
         self.priority(priority);
         self.target_date(target_date);
         self.product_area(product_area);
+    }
+
+    function validateForm() {
+
     }
 }
 

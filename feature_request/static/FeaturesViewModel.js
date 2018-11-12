@@ -74,6 +74,9 @@ function FeaturesViewModel() {
     }
 
     self.deleteFeature = function (id) {
+        if (confirm("Are you sure you want to delete?") == false)
+            return;
+
         apiRequest("/api/feature/delete", JSON.stringify({
             'id': id
         }), "DELETE", response)

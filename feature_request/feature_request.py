@@ -20,8 +20,8 @@ def index():
 # Get all features
 @app.route('/api/features', methods=['GET'])
 def get_features():
-    q = db.session.query(Feature)
-    return jsonify([util.toDict(feature) for feature in q.all()])
+    query = Feature.query.order_by(Feature.priority)
+    return jsonify([util.toDict(feature) for feature in query.all()])
 
 
 # Add a feature
@@ -66,4 +66,4 @@ def delete_feature():
 
 
 if __name__ == "__main__":
-    app.run(host='192.168.8.100')
+    app.run()

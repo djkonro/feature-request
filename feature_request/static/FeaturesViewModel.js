@@ -40,7 +40,6 @@ function FeaturesViewModel() {
             alert("Priority requires integer input")
             return;
         }
-        validateForm()
         var feature = {
             'id': self.id(),
             'title': self.title(),
@@ -119,11 +118,6 @@ function FeaturesViewModel() {
         self.target_date(target_date);
         self.product_area(product_area);
     }
-
-    function validateForm() {
-
-    }
 }
-
 
 ko.applyBindings(new FeaturesViewModel());

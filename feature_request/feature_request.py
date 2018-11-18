@@ -1,16 +1,17 @@
+import sys
+
 from flask import Flask, request
 from flask import jsonify, Blueprint
 from flask import render_template
 import datetime
 
+from db_setup import dbsetup
 from models import db
 from models import Client, ProductArea, Feature
 import util
+import config
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://test:testing@localhost/testdb'
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
-db.init_app(app)
+from app_factory import create_app
 
 api = Blueprint('api', __name__)
 
@@ -72,5 +73,21 @@ def delete_feature():
 
 
 if __name__ == "__main__":
+
+    if len(sys.argv) > 1 :
+        env = sys.argv[1]
+    else:
+        raise ValueError('Environment name required')
+
+    if env == 'dev':
+        app = create_app(config.DevelopmentConfig)
+    elif env == 'prod':
+        app = create_app(config.ProductionConfig)
+    elif env == 'docker':
+        app = create_app(config.DockerDeployConfig)
+    else:
+        raise ValueError('Invalid environment name')
+    
     app.register_blueprint(api)
-    app.run()
+    dbsetup(db, app)
+    app.run(host='0.0.0.0')

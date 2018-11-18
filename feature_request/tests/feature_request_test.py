@@ -5,10 +5,13 @@ import json
 
 from flask import Flask
 
+import config
+from app_factory import create_app
+from db_setup import dbsetup
 from models import db
 from feature_request import api
 
-app = Flask(__name__)
+app = create_app(config.TestingConfig)
 
 htype = 'application/json'
 headers = {
@@ -22,7 +25,7 @@ test_feature = {
     'client': 'Client A',
     'priority': '1',
     'target_date': '2018-12-12',
-    'product_area': 'test product_area'}
+    'product_area': 'Billing'}
 
 
 class FlaskrTestCase(unittest.TestCase):
@@ -31,10 +34,11 @@ class FlaskrTestCase(unittest.TestCase):
 
         self.app = app.test_client()
         self.app.testing = True
-        self.app.application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./db.tests'
-        self.app.application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+        #self.app.application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./db.tests'
+        #self.app.application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
         app.register_blueprint(api)
         db.init_app(app)
+        dbsetup(db, app)
         with app.app_context():
             db.create_all()
 
@@ -62,7 +66,7 @@ class FlaskrTestCase(unittest.TestCase):
         self.assertEqual(json_resp[0]['client'], 'Client A')
         self.assertEqual(json_resp[0]['priority'], 1)
         self.assertEqual(json_resp[0]['target_date'], '2018-12-12')
-        self.assertEqual(json_resp[0]['product_area'], 'test product_area')
+        self.assertEqual(json_resp[0]['product_area'], 'Billing')
 
     def test_update_feature(self):
         self.test_add_feature()

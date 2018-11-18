@@ -1,21 +1,20 @@
-version: '2'
+version: '3'
 services:
-  app:
-    build: .
-    ports:
-     - "5000:5000"
-    links:
-      - mysql
-
   mysql:
     image: mysql:5.7
     container_name: mysql
     ports:
       - 32000:3306
     environment:
-      - MYSQL_ROOT_PASSWORD="root"
-      - MYSQL_DATABASE="testdb"
-      - MYSQL_USER="test"
-      - MYSQL_PASSWORD="testing"
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=appdb
+      - MYSQL_USER=appuser
+      - MYSQL_PASSWORD=password
 
-
+  app:
+    build: .
+    ports:
+     - "5000:5000"
+    depends_on:
+      - mysql
+    command: ["./wait-for-it.sh", "mysql:3306", "-t", "120" , "--", "python", "feature_request.py", "docker"]

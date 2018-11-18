@@ -20,10 +20,10 @@ headers = {
 }
 test_feature = {
     'id': '1',
-    'title': 'test title',
+    'title': 'test feature',
     'description': 'test description',
     'client': 'Client A',
-    'priority': '1',
+    'priority': 1,
     'target_date': '2018-12-12',
     'product_area': 'Billing'}
 
@@ -34,8 +34,6 @@ class FlaskrTestCase(unittest.TestCase):
 
         self.app = app.test_client()
         self.app.testing = True
-        #self.app.application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./db.tests'
-        #self.app.application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
         app.register_blueprint(api)
         db.init_app(app)
         dbsetup(db, app)
@@ -61,7 +59,7 @@ class FlaskrTestCase(unittest.TestCase):
         response = self.app.get('/api/features')
         json_resp = json.loads(response.get_data(as_text=True))
         self.assertEqual(len(json_resp), 1)
-        self.assertEqual(json_resp[0]['title'], 'test title')
+        self.assertEqual(json_resp[0]['title'], 'test feature')
         self.assertEqual(json_resp[0]['description'], 'test description')
         self.assertEqual(json_resp[0]['client'], 'Client A')
         self.assertEqual(json_resp[0]['priority'], 1)
@@ -76,7 +74,7 @@ class FlaskrTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         response = self.app.get('/api/features')
         json_resp = json.loads(response.get_data(as_text=True))
-        self.assertEqual(json_resp[0]['title'], 'test title')
+        self.assertEqual(json_resp[0]['title'], 'test feature')
         self.assertNotEqual(json_resp[0]['client'], 'Client A')
         self.assertEqual(json_resp[0]['client'], 'Client B')
 
@@ -85,16 +83,21 @@ class FlaskrTestCase(unittest.TestCase):
         response = self.app.patch('/api/feature/update',
                                   data=json.dumps(test_feature), headers=headers)
         self.assertEqual(response.status_code, 200)
-        test_feature2 = test_feature
-        test_feature2['priority'] = 1
+        test_feature2 = dict(test_feature)
+        test_feature2['title'] = 'test feature2'
+        self.assertEqual(test_feature['title'], 'test feature')
+        self.assertEqual(test_feature2['priority'], 1)
+        self.assertEqual(test_feature['priority'], 1)
         response = self.app.post('/api/feature/new',
                                  data=json.dumps(test_feature2), headers=headers)
         self.assertEqual(response.status_code, 200)
         response = self.app.get('/api/features')
         json_resp = json.loads(response.get_data(as_text=True))
         self.assertEqual(len(json_resp), 2)
-        self.assertEqual(json_resp[0]['priority'], 1)
+        self.assertEqual(json_resp[1]['title'], 'test feature')
         self.assertEqual(json_resp[1]['priority'], 2)
+        self.assertEqual(json_resp[0]['title'], 'test feature2')
+        self.assertEqual(json_resp[0]['priority'], 1)
 
     def test_delete_feature(self):
         self.test_add_feature()

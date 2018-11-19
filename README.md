@@ -1,7 +1,7 @@
 # Feature request app
 
 This is a python web application  which provides the ability
-to record the details of a feature request made by by clients. Though 
+to record the details of a feature request made by clients. Though 
 there are some limitations such as hard-coded client
 and priority data, there are some useful actions that can be
 carried out.
@@ -39,7 +39,8 @@ $ sudo docker-compose up
 
 ### Running Locally
 
-Setup [Mysql database](https://www.mysql.com/)
+Setup [Mysql database](https://www.mysql.com/).
+
 Run the following commands from the Mysql prompt
 
 ```

@@ -74,7 +74,7 @@ def delete_feature():
 
 if __name__ == "__main__":
 
-    if len(sys.argv) > 1 :
+    if len(sys.argv) > 1:
         env = sys.argv[1]
     else:
         raise ValueError('Environment name required')
@@ -87,7 +87,7 @@ if __name__ == "__main__":
         app = create_app(config.DockerDeployConfig)
     else:
         raise ValueError('Invalid environment name')
-    
+
     app.register_blueprint(api)
     dbsetup(db, app)
     app.run(host='0.0.0.0')

@@ -51,7 +51,8 @@ class FlaskrTestCase(unittest.TestCase):
 
     def test_add_feature(self):
         response = self.app.post('/api/feature/new',
-                                 data=json.dumps(test_feature), headers=headers)
+                                 data=json.dumps(test_feature),
+                                 headers=headers)
         self.assertEqual(response.status_code, 200)
 
     def test_get_features_add_feature(self):
@@ -70,7 +71,8 @@ class FlaskrTestCase(unittest.TestCase):
         self.test_add_feature()
         test_feature['client'] = 'Client B'
         response = self.app.patch('/api/feature/update',
-                                  data=json.dumps(test_feature), headers=headers)
+                                  data=json.dumps(test_feature),
+                                  headers=headers)
         self.assertEqual(response.status_code, 200)
         response = self.app.get('/api/features')
         json_resp = json.loads(response.get_data(as_text=True))
@@ -81,7 +83,8 @@ class FlaskrTestCase(unittest.TestCase):
     def test_priority_auto_update(self):
         self.test_add_feature()
         response = self.app.patch('/api/feature/update',
-                                  data=json.dumps(test_feature), headers=headers)
+                                  data=json.dumps(test_feature),
+                                  headers=headers)
         self.assertEqual(response.status_code, 200)
         test_feature2 = dict(test_feature)
         test_feature2['title'] = 'test feature2'
@@ -89,7 +92,8 @@ class FlaskrTestCase(unittest.TestCase):
         self.assertEqual(test_feature2['priority'], 1)
         self.assertEqual(test_feature['priority'], 1)
         response = self.app.post('/api/feature/new',
-                                 data=json.dumps(test_feature2), headers=headers)
+                                 data=json.dumps(test_feature2),
+                                 headers=headers)
         self.assertEqual(response.status_code, 200)
         response = self.app.get('/api/features')
         json_resp = json.loads(response.get_data(as_text=True))
@@ -105,7 +109,8 @@ class FlaskrTestCase(unittest.TestCase):
         json_resp = json.loads(response.get_data(as_text=True))
         self.assertEqual(len(json_resp), 1)
         response = self.app.delete('/api/feature/delete',
-                                   data=json.dumps(test_feature), headers=headers)
+                                   data=json.dumps(test_feature),
+                                   headers=headers)
         self.assertEqual(response.status_code, 200)
         response = self.app.get('/api/features')
         json_resp = json.loads(response.get_data(as_text=True))

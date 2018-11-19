@@ -16,7 +16,7 @@ def updatePriority(client, priority):
     feature = Feature.query.filter_by(
         client=client).filter_by(priority=priority).first()
     update_list = []
-    while feature != None:
+    while (feature != None):
         update_list.append(feature)
         priority = priority + 1
         feature = Feature.query.filter_by(
